@@ -38,4 +38,4 @@ SqlDbNu65Db                     | string | Nu65Db        		| База данны
 
 ![Alt text](_img/app-screenshot-3.png "Скриншот приложения 3")  
 
-![Alt text](_img/app-screenshot-3.png "Скриншот приложения 4")  
+![Alt text](_img/app-screenshot-4.png "Скриншот приложения 4")  
