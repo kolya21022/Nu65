@@ -1,0 +1,189 @@
+﻿<!-- Боковое меню главного окна приложения -->
+<UserControl x:Class="NU65.View.Menus.SideMenu"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:util="clr-namespace:NU65.Util"
+      d:DesignWidth="300"
+      mc:Ignorable="d" >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Иконки кнопок в SVG -->
+                <ResourceDictionary Source="../Util/SvgIconsDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Name="WrapperStackPanel">
+            <Expander Name="WorkNu65Expander"
+				HorizontalAlignment="Stretch"
+					  HorizontalContentAlignment="Stretch" Width="Auto"
+					  IsExpanded="True"
+					  Cursor="Hand"
+					  Padding="2.5"
+					  Margin="2.5 5 2.5 2.5" >
+                <!-- Правка дефекта с неотображением на некоторых машинах фона заголовка -->
+                <Expander.Header >
+                    <Border Background="{x:Static util:Constants.BackColor4_BlueBayoux}">
+                        <TextBlock Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+						           Text="Работа с Nu65" 
+								   Padding="2.5"
+								   Width="{Binding ElementName=InternalExpander, Path=ActualWidth}"
+								   HorizontalAlignment="Stretch" />
+                    </Border>
+                </Expander.Header>
+                <StackPanel>
+
+                    <Button HorizontalContentAlignment="Left" Cursor="Hand" Margin="0 0 0 5" 
+                            ToolTip="Работа с Nu65" Click="WorkingPartNu65Button_OnClick" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource ListSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="Работа с Nu65" 
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button HorizontalContentAlignment="Left" Cursor="Hand" Margin="0 0 0 5" 
+                            ToolTip="Скопировать материал в изделия" Click="CopyMaterialToProductsButton_OnClick" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource ListSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="Скопировать материал в изделия" 
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Expander>
+
+            <Expander Name="MssqlExpander"
+                      HorizontalAlignment="Stretch"
+                      HorizontalContentAlignment="Stretch" Width="Auto"
+                      IsExpanded="True"
+                      Cursor="Hand"
+                      Padding="2.5"
+                      Margin="2.5 5 2.5 2.5" >
+                <!-- Правка дефекта с неотображением на некоторых машинах фона заголовка -->
+                <Expander.Header >
+                    <Border Background="{x:Static util:Constants.BackColor4_BlueBayoux}">
+                        <TextBlock Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                                   Text="Справочники MsSQL" 
+                                   Padding="2.5"
+                                   Width="{Binding ElementName=InternalExpander, Path=ActualWidth}"
+                                   HorizontalAlignment="Stretch" />
+                    </Border>
+                </Expander.Header>
+                <StackPanel>
+
+                    <Button HorizontalContentAlignment="Left" Cursor="Hand" Margin="0 0 0 5" 
+                            ToolTip="Справочник единиц измерения" Click="MssqlMeasureButton_OnClick" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource ListSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="Единицы измерения" 
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button HorizontalContentAlignment="Left" Cursor="Hand" Margin="0 0 0 5" 
+                            ToolTip="Справочник материалов" Click="MssqlMaterialButton_OnClick" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource ListSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="Материалы" 
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button HorizontalContentAlignment="Left" Cursor="Hand" Margin="0 0 0 5" 
+                            ToolTip="Справочник изделий" Click="MssqlProductBaseButton_OnClick" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource ListSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="База изделий" 
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+                    <Button HorizontalContentAlignment="Left" Cursor="Hand" Margin="0 0 0 5" 
+                            ToolTip="Справочник Nu65" Click="MssqlNu65Button_OnClick" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource ListSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="Nu65" 
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+            </Expander>
+
+            <Expander Name="FoxProExpander"
+                      HorizontalAlignment="Stretch"
+                      HorizontalContentAlignment="Stretch" Width="Auto"
+                      IsExpanded="True"
+                      Cursor="Hand"
+                      Padding="2.5"
+                      Margin="2.5 5 2.5 2.5" >
+                <!-- Правка дефекта с неотображением на некоторых машинах фона заголовка -->
+                <Expander.Header >
+                    <Border Background="{x:Static util:Constants.BackColor4_BlueBayoux}">
+                        <TextBlock Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                                   Text="Справочники FoxPro" 
+                                   Padding="2.5"
+                                   Width="{Binding ElementName=InternalExpander, Path=ActualWidth}"
+                                   HorizontalAlignment="Stretch" />
+                    </Border>
+                </Expander.Header>
+                <StackPanel>
+
+                    <Button HorizontalContentAlignment="Left" Cursor="Hand" Margin="0 0 0 5" 
+                            ToolTip="Справочник изделий" Click="FoxProProductButton_OnClick" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource ListSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="База изделий" 
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button HorizontalContentAlignment="Left" Cursor="Hand" Margin="0 0 0 5" 
+                            ToolTip="Справочник материалов" Click="FoxProMaterialButton_OnClick" >
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource ListSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="Материалы" 
+                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

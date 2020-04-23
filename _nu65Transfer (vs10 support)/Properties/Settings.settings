@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TransferNu65.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SqlServerNu65" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PR-2\PR2SQL2017</Value>
+    </Setting>
+    <Setting Name="SqlDbNu65Db" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Nu65DB</Value>
+    </Setting>
+    <Setting Name="TimeoutSqlServerConnectInSecond" Type="System.String" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="FoxproDbFolder_Fox60_Arm_Base" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d:\VirtualMashinFiles\nu65\DBF\V\FOX60\arm\base\</Value>
+    </Setting>
+    <Setting Name="FoxproDbFolder_nu65" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d:\VirtualMashinFiles\nu65\DBF\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

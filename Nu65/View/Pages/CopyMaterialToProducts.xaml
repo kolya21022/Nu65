@@ -1,0 +1,492 @@
+﻿<Page x:Class="NU65.View.Pages.CopyMaterialToProducts"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:util="clr-namespace:NU65.Util"
+      mc:Ignorable="d" 
+      KeyDown="Page_OnKeyDown" 
+      d:DesignHeight="200" d:DesignWidth="650">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Иконки кнопок в SVG -->
+                <ResourceDictionary Source="../Pages/../Util/SvgIconsDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--Стиль Label #1-->
+            <Style x:Key="LabelStyle1" TargetType="{x:Type Label}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="2 0"/>
+                <Setter Property="Foreground" Value="{x:Static util:Constants.ForeColor2_PapayaWhip}"/>
+            </Style>
+
+            <!--Стиль Label #2-->
+            <Style x:Key="LabelStyle2" TargetType="{x:Type Label}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="{x:Static util:Constants.ForeColor2_PapayaWhip}"/>
+                <Setter Property="Margin" Value="1 0"/>
+            </Style>
+
+            <Style x:Key="SearchDataGridStyle" TargetType="DataGrid">
+                <Setter Property="HorizontalGridLinesBrush" Value="{x:Static util:Constants.LineBorderColor1_BigStone}"/>
+                <Setter Property="VerticalGridLinesBrush" Value="{x:Static util:Constants.LineBorderColor1_BigStone}"/>
+                <Setter Property="BorderBrush" Value="{x:Static util:Constants.LineBorderColor3_SanJuan}"/>
+                <Setter Property="Background" Value="{x:Static util:Constants.BackColor8_DiSerria}"/>
+                <Setter Property="Foreground" Value="{x:Static util:Constants.ForeColor1_BigStone}"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="AutoGenerateColumns" Value="False"/>
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                <Setter Property="HeadersVisibility" Value="None"/>
+                <Setter Property="SelectionUnit" Value="FullRow"/>
+                <Setter Property="Margin" Value="2.5 -3 2.5 2.5"/>
+                <Setter Property="SelectionMode" Value="Single"/>
+                <Setter Property="Visibility" Value="Collapsed"/>
+                <Setter Property="AlternationCount" Value="2"/>
+                <Setter Property="IsReadOnly" Value="True"/>
+                <Setter Property="RowHeight" Value="30"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Height" Value="120"/>
+            </Style>
+
+            <Style x:Key="SearchDataGridCellStyle" TargetType="DataGridCell">
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            </Style>
+
+            <Style x:Key="ElementStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="3"/>
+            </Style>
+
+            <Style x:Key="SearchDataGridRowStyle" TargetType="DataGridRow">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="IsSelected" Value="True"/>
+                    </Trigger>
+                    <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                        <Setter Property="Background"
+                                    Value="{x:Static util:Constants.BackColor1_AthensGray}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок страницы -->
+        <Grid Grid.Row="0" Name="TitlePageGrid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Margin="2 0" Name="TitleLabel" />
+        </Grid>
+
+        <Grid Grid.Row="1" Name="WrappedGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Name="LeftPart" Margin="0 0 0.8 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Style="{StaticResource LabelStyle1}" Content="Из изделия:"/>
+
+                <!--Поиск изделия-->
+                <Grid Grid.Row="1" Name="Product1WrapperGrid"
+						      LostFocus="SearchFieldWrapperGrid_OnLostFocus" 
+						      GotFocus="SearchFieldWrapperGrid_OnGotFocus" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <!-- TextBox поиска [Изделия 1] -->
+                    <TextBox Grid.Row="0" Margin="2.5" 
+							         VerticalContentAlignment="Center" HorizontalScrollBarVisibility="Auto" 
+									 PreviewKeyUp="TextBox_OnPreviewKeyUp"
+							         TextChanged="Product1TextBox_OnTextChanged" 
+							         Name="Product1TextBox" />
+
+                    <!-- DataGrid поиска сущности (Таблица выдачи результатов поиска) -->
+                    <DataGrid Grid.Row="1"
+                              Style="{StaticResource SearchDataGridStyle}"
+                              CellStyle="{StaticResource SearchDataGridCellStyle}"
+                              RowStyle="{StaticResource SearchDataGridRowStyle}"
+							          Name="SearchProduct1DataGrid" 
+							          PreviewKeyUp="SearchDataGrid_OnPreviewKeyUp" 
+							          PreviewKeyDown="SearchDataGrid_OnPreviewKeyDown"
+							          PreviewMouseDown="SearchDataGrid_OnPreviewMouseDown" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=CodeProduct}" Width="Auto"
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                            <DataGridTextColumn Binding="{Binding Path=Name}" Width="*" 
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                            <DataGridTextColumn Binding="{Binding Path=Mark}" Width="Auto" 
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!--Информация о выбранном изделии-->
+                <Grid Grid.Row="2" Background="{x:Static util:Constants.BackColor5_WaikawaGray}" Margin="2.5 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="0" Style="{StaticResource LabelStyle1}" Content="Код изделия:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="0" Style="{StaticResource LabelStyle1}" Name="Product1CodeLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="1" Style="{StaticResource LabelStyle1}" Content="Наименование изделия:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" Style="{StaticResource LabelStyle1}" Name="Product1NameLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="2" Style="{StaticResource LabelStyle1}" Content="Марка изделия:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" Style="{StaticResource LabelStyle1}" Name="Product1MarkLabel"/>
+                </Grid>
+
+                <!--Поиск материала для копирования-->
+                <Grid Grid.Row="3" Name="MaterialWrapperGrid"
+                      LostFocus="SearchFieldWrapperGrid_OnLostFocus" 
+                      GotFocus="SearchFieldWrapperGrid_OnGotFocus" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <!-- TextBox поиска [Материала] -->
+                    <TextBox Grid.Row="0" Margin="2.5" 
+                             VerticalContentAlignment="Center" HorizontalScrollBarVisibility="Auto" 
+                             PreviewKeyUp="TextBox_OnPreviewKeyUp"
+                             TextChanged="MaterialTextBox_OnTextChanged" 
+                             Name="MaterialTextBox" />
+
+                    <!-- DataGrid поиска сущности (Таблица выдачи результатов поиска) -->
+                    <DataGrid Grid.Row="1"
+                              Style="{StaticResource SearchDataGridStyle}"
+                              CellStyle="{StaticResource SearchDataGridCellStyle}"
+                              RowStyle="{StaticResource SearchDataGridRowStyle}"
+                              Name="SearchMaterialDataGrid" 
+                              PreviewKeyUp="SearchDataGrid_OnPreviewKeyUp" 
+                              PreviewKeyDown="SearchDataGrid_OnPreviewKeyDown"
+                              PreviewMouseDown="SearchDataGrid_OnPreviewMouseDown" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=CodeMaterial}" Width="Auto"
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                            <DataGridTextColumn Binding="{Binding Path=Name}" Width="*" 
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                            <!--<DataGridTextColumn Binding="{Binding Path=Profile}" Width="Auto"
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                            <DataGridTextColumn Binding="{Binding Path=Gost}" Width="Auto"
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>-->
+                            <DataGridTextColumn Binding="{Binding Path=WorkGuildId}" Width="Auto" 
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                            <DataGridTextColumn Binding="{Binding Path=ParcelId}" Width="Auto" 
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!--Информация о выбранном материале-->
+                <Grid Grid.Row="4" Background="{x:Static util:Constants.BackColor5_WaikawaGray}" Margin="2.5 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="0" Style="{StaticResource LabelStyle1}" Content="Код материала:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="0" Style="{StaticResource LabelStyle1}" Name="MaterialCodeLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="1" Style="{StaticResource LabelStyle1}" Content="Наименование материала:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" Style="{StaticResource LabelStyle1}" Name="MaterialNameLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="2" Style="{StaticResource LabelStyle1}" Content="Марка материала:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" Style="{StaticResource LabelStyle1}" Name="MaterialMarkLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="3" Style="{StaticResource LabelStyle1}" Content="ГОСТ материала:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="3" Style="{StaticResource LabelStyle1}" Name="MaterialGostLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="4" Style="{StaticResource LabelStyle1}" Content="Единица измерения:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4" Style="{StaticResource LabelStyle1}" Name="MeasureLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="5" Style="{StaticResource LabelStyle1}" Content="Цех:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="5" Style="{StaticResource LabelStyle1}" Name="WorkGuildLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="6" Style="{StaticResource LabelStyle1}" Content="Участкок:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="6" Style="{StaticResource LabelStyle1}" Name="RegionLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="7" Style="{StaticResource LabelStyle1}" Content="Норма расхода:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="7" Style="{StaticResource LabelStyle1}" Name="AuxiliaryMaterialConsumptionRateLabel"/>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1" Name="RightPart" Margin="0.8 0 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Style="{StaticResource LabelStyle1}" Content="В изделия:"/>
+
+                <!--Поиск изделия -->
+                <Grid Grid.Row="1" Name="Product2WrapperGrid"
+                      LostFocus="SearchFieldWrapperGrid_OnLostFocus" 
+                      GotFocus="SearchFieldWrapperGrid_OnGotFocus" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <!-- TextBox поиска [Изделия 2] -->
+                    <TextBox Grid.Row="0" Margin="2.5" 
+                             VerticalContentAlignment="Center" HorizontalScrollBarVisibility="Auto" 
+                             PreviewKeyUp="TextBox_OnPreviewKeyUp"
+                             TextChanged="Product2TextBox_OnTextChanged" 
+                             Name="Product2TextBox" />
+
+                    <!-- DataGrid поиска сущности (Таблица выдачи результатов поиска) -->
+                    <DataGrid Grid.Row="1"
+                              Style="{StaticResource SearchDataGridStyle}"
+                              CellStyle="{StaticResource SearchDataGridCellStyle}"
+                              RowStyle="{StaticResource SearchDataGridRowStyle}"
+                              Name="SearchProduct2DataGrid" 
+                              PreviewKeyUp="SearchProduct2DataGrid_OnPreviewKeyUp" 
+                              PreviewKeyDown="SearchDataGrid_OnPreviewKeyDown"
+                              PreviewMouseDown="SearchProduct2DataGrid_OnPreviewMouseDown" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=CodeProduct}" Width="Auto"
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                            <DataGridTextColumn Binding="{Binding Path=Name}" Width="*" 
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                            <DataGridTextColumn Binding="{Binding Path=Mark}" Width="Auto" 
+                                                EditingElementStyle="{StaticResource ElementStyle}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!--Информация о выбранном изделии-->
+                <Grid Grid.Row="2" Background="{x:Static util:Constants.BackColor5_WaikawaGray}" Margin="2.5 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="0" Style="{StaticResource LabelStyle1}" Content="Код изделия:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="0" Style="{StaticResource LabelStyle1}" Name="Product2CodeLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="1" Style="{StaticResource LabelStyle1}" Content="Наименование изделия:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" Style="{StaticResource LabelStyle1}" Name="Product2NameLabel"/>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" Grid.Row="2" Style="{StaticResource LabelStyle1}" Content="Марка изделия:"/>
+                    <Label Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" Style="{StaticResource LabelStyle1}" Name="Product2MarkLabel"/>
+                </Grid>
+
+                <!--Шапка таблицы-->
+                <Grid Grid.Row="3" Background="{x:Static util:Constants.BackColor3_SanJuan}" Margin="2.5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource LabelStyle1}" 
+                           Content="Список изделий"/>
+
+                    <Button Grid.Column="1" Margin="2.5" Padding="0 0 5 0" Cursor="Hand" 
+                            Name="AddProductInListButton" IsEnabled="False"
+                            ToolTip="Добавить изделие в список" Click="AddProductButton_OnClick">
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="20" Margin="5 0">
+                                <Rectangle.Fill>
+                                    <VisualBrush Visual="{StaticResource AddSvgIcon}" Stretch="Uniform" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock Text="Добавить" VerticalAlignment="Center" 
+                                       TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
+                    <Label Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource LabelStyle1}" Name="CountItemsLabel"/>
+                </Grid>
+
+                <DataGrid Grid.Row="4" Margin="2.5 0" 		         
+                          Name="ProductListDataGrid" 
+                          HorizontalGridLinesBrush="{x:Static util:Constants.LineBorderColor1_BigStone}" 
+                          VerticalGridLinesBrush="{x:Static util:Constants.LineBorderColor1_BigStone}" 
+                          BorderBrush="{x:Static util:Constants.LineBorderColor3_SanJuan}" 
+                          Foreground="{x:Static util:Constants.ForeColor1_BigStone}" 
+                          HorizontalScrollBarVisibility="Auto" 
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Stretch" 
+                          AutoGenerateColumns="False" 
+                          SelectionUnit="FullRow" 
+                          SelectionMode="Single" 
+                          AlternationCount="2" 
+                          RowHeaderWidth="0" 
+                          IsReadOnly="True" 
+                          Cursor="Hand"
+                          CellStyle="{StaticResource SearchDataGridCellStyle}"
+                          RowStyle="{StaticResource SearchDataGridRowStyle}">
+                    <DataGrid.Columns>
+
+                        <!-- Кнопка удаления из списка -->
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="DeleteButton" Click="DeleteProductFromListButton_OnClick" 
+											        ToolTip="Удалить запись из этого списка" 
+											        HorizontalAlignment="Center" VerticalAlignment="Top" 
+											        Cursor="Hand" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="УДЛ" VerticalAlignment="Center" 
+													           TextTrimming="CharacterEllipsis"/>
+                                            <Rectangle Width="20" Margin="1.25 0">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Visual="{StaticResource DeleteSvgIcon}" 
+															             Stretch="Uniform" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Код изделия" 
+                                            Width="1*"  
+                                            Binding="{Binding Path=CodeProduct}" 
+                                            EditingElementStyle="{StaticResource ElementStyle}"/>
+                        <DataGridTextColumn Header="Наименование" 
+                                            Width="1*"  
+                                            Binding="{Binding Path=Name}" 
+                                            EditingElementStyle="{StaticResource ElementStyle}"/>
+                        <DataGridTextColumn Header="Марка" 
+                                            Width="1*"  
+                                            Binding="{Binding Path=Mark}" 
+                                            EditingElementStyle="{StaticResource ElementStyle}"/>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2" Name="ButtonWrappedGrid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <!-- Кнопка с иконкой и подсветкой клавиатурного фокуса -->
+            <Button Name="ConfirmButton" Grid.Column="0" Margin="2.5 5 5 5" Padding="2.5" Cursor="Hand" ToolTip="Копирование" 
+					Click="CopyButton_OnClick" 
+					BorderThickness="1" BorderBrush="{x:Static util:Constants.LineBorderColor5_Sail}" >
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+								BorderThickness="{TemplateBinding BorderThickness}" 
+								Background="{TemplateBinding Background}">
+                            <ContentPresenter Content="{TemplateBinding Content}" 
+											  ContentTemplate="{TemplateBinding ContentTemplate}" 
+											  Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="Background" 
+										Value="{x:Static util:Constants.LineBorderColor5_Sail}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Rectangle Width="20" Margin="5 0">
+                        <Rectangle.Fill>
+                            <VisualBrush  Visual="{StaticResource ConfirmSvgIcon}" Stretch="Uniform" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="Копировать" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+            </Button>
+
+            <!-- Кнопка с иконкой и подсветкой клавиатурного фокуса -->
+            <Button Grid.Column="1" Padding="2.5" Margin="2.5 5 5 5" Cursor="Hand" ToolTip="Отмена"
+					Click="CancelButton_OnClick" 
+					BorderThickness="1" BorderBrush="{x:Static util:Constants.LineBorderColor5_Sail}" >
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+								BorderThickness="{TemplateBinding BorderThickness}" 
+								Background="{TemplateBinding Background}">
+                            <ContentPresenter Content="{TemplateBinding Content}" 
+											  ContentTemplate="{TemplateBinding ContentTemplate}" 
+											  Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="Background" 
+										Value="{x:Static util:Constants.LineBorderColor5_Sail}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Rectangle Width="20" Margin="5 0">
+                        <Rectangle.Fill>
+                            <VisualBrush  Visual="{StaticResource CloseSvgIcon}" Stretch="Uniform" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="Отмена" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <Grid Grid.Column="0" Grid.Row="3"
+              Margin="3" Background="{x:Static util:Constants.BackColor5_WaikawaGray}"
+              Name="ProgressBarGrid"
+              Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" 
+                   Name="ProgressBarLabel"
+                   Content="Подготовка:"
+                   Foreground="White"/>
+            <ProgressBar Grid.Column="1" 
+                         Name="ProgressBar"
+                         Height="15"
+                         Margin="5"/>
+        </Grid>
+    </Grid>
+</Page>

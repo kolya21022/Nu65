@@ -1,0 +1,372 @@
+﻿<!--Страница для работы со справочником Nu65-->
+<Page x:Class="NU65.View.Pages.WorkingPartNu65"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:util="clr-namespace:NU65.Util"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="650" 
+      >
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Иконки кнопок в SVG -->
+                <ResourceDictionary Source="../Util/SvgIconsDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок страницы -->
+        <Grid Grid.Row="0" Name="TitlePageGrid"  Margin="0 0 2.5 2.5" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Margin="2 5">
+                Работа с Nu65
+            </TextBlock>
+        </Grid>
+
+        <!-- Обёртка полей ввода и кнопок -->
+        <Grid Name="FieldsWrapperGrid" Margin="0 0 2.5 0" Grid.Row="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                           Fill="{x:Static util:Constants.BackColor3_SanJuan}" />
+                <Label Grid.Column="0" Grid.Row="0" FontSize="15" FontWeight="Bold" 
+                       Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                       HorizontalContentAlignment="Center"
+                       VerticalAlignment="Center"
+                       Content="Поиск по № изделия" />
+                <TextBox Grid.Row="1" Margin="7.5 1 7.5 3" VerticalContentAlignment="Center" 
+                         Name="SearchTextBox" Padding="5 1"
+                         TextChanged="SearchTextBox_OnTextChanged"/>
+            </Grid>
+
+            <ListBox Name="ProductListBox" Grid.Column="0" SelectionMode="Single"
+						 ScrollViewer.VerticalScrollBarVisibility="Visible"
+				         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+						 SelectionChanged="ProductListBox_OnSelectionChanged"
+						 KeyDown="ProductListBox_OnKeyDown" Grid.Row="2">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Foreground" Value="{x:Static util:Constants.ForeColor1_BigStone}" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="TextElement.Foreground" 
+											Value="{x:Static util:Constants.ForeColor4_Red}"/>
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+                        <TextBlock FontFamily="Lucida Console" TextWrapping="Wrap" FontSize="17" 
+                                   Text="{Binding Path=DisplayCodeString}">
+                        </TextBlock>
+                        <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                           Fill="{x:Static util:Constants.BackColor3_SanJuan}" />
+                <Rectangle Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
+                           Fill="{x:Static util:Constants.BackColor4_BlueBayoux}" />
+                <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" 
+                           Fill="{x:Static util:Constants.BackColor6_Lochmara}" />
+
+                <Label Grid.Column="0" Grid.Row="0" FontSize="15" FontWeight="Bold" Padding="5 1" 
+                       Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                       HorizontalContentAlignment="Right"
+                       VerticalAlignment="Center"
+                       Content="Код:" />
+                <Label Grid.Column="1" Grid.Row="0" FontSize="13" Padding="5 1" 
+                       Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                       HorizontalContentAlignment="Left"
+                       VerticalAlignment="Center"
+                       Name="IdLabel" />
+                <Label Grid.Column="0" Grid.Row="1" FontSize="15" FontWeight="Bold" Padding="5 1" 
+                   Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                   HorizontalContentAlignment="Right"
+                   VerticalAlignment="Center"
+                   Content="Наименование:" />
+                <Label Grid.Column="1" Grid.Row="1" FontSize="13" Padding="5 1" 
+                   Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                   HorizontalContentAlignment="Left"
+                   VerticalAlignment="Center"
+                   Name="NameLabel" />
+                <Label Grid.Column="2" Grid.Row="1" FontSize="15" FontWeight="Bold" Padding="5 1" 
+                       Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                       HorizontalContentAlignment="Right"
+                       VerticalAlignment="Center"
+                       Content="Обозначение:" />
+                <Label Grid.Column="3" Grid.Row="1" FontSize="13" Padding="5 1" 
+                       Foreground="{x:Static util:Constants.ForeColor2_PapayaWhip}" 
+                       HorizontalContentAlignment="Left"
+                       VerticalAlignment="Center"
+                       Name="DesignationLabel" />
+                <Button Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="2.5" Padding="0 0 5 0" Cursor="Hand" 
+                        Name="CopyMaterialButton" IsEnabled="False"
+                    ToolTip="Скопировать материал" Click="CopyButton_OnClick">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="20" Margin="5 0">
+                            <Rectangle.Fill>
+                                <VisualBrush Visual="{StaticResource AddSvgIcon}" Stretch="Uniform" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <TextBlock Text="Скопировать материал" VerticalAlignment="Center" 
+                               TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <DataGrid Name="MaterialDataGrid" Grid.Column="1" Grid.Row="2" 
+						  PreviewKeyDown="MaterialDataGrid_OnPreviewKeyDown"
+						  FontSize="16" 
+				          MinWidth="170" 
+				          EnableRowVirtualization="false" 
+						  VirtualizingStackPanel.VirtualizationMode="Standard" 
+				          HorizontalGridLinesBrush="{x:Static util:Constants.LineBorderColor1_BigStone}" 
+				          VerticalGridLinesBrush="{x:Static util:Constants.LineBorderColor1_BigStone}" 
+				          BorderBrush="{x:Static util:Constants.LineBorderColor3_SanJuan}" 
+				          Foreground="{x:Static util:Constants.ForeColor1_BigStone}" 
+				          HorizontalScrollBarVisibility="Auto" 
+				          HorizontalAlignment="Stretch" 
+				          VerticalAlignment="Stretch" 
+				          AutoGenerateColumns="False" 
+				          Margin="3,1,2,2" 
+				          SelectionUnit="FullRow" 
+				          SelectionMode="Single" 
+				          AlternationCount="2" 
+				          RowHeaderWidth="0" 
+				          IsReadOnly="True" 
+				          Cursor="Hand">
+
+                <!-- Альтернативный цвет строк -->
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter Property="Background" 
+									        Value="{x:Static util:Constants.BackColor1_AthensGray}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <!--Кнопка "Удалить"-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="DeleteButton"
+                                    Click="DeleteButton_OnClick"
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    ToolTip="Удалить запись">
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--<TextBlock Text="УДЛ" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>-->
+                                        <Rectangle Width="20" Height="20" Margin="5 0">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Visual="{StaticResource DeleteSvgIcon}" Stretch="Uniform" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!--Кнопка "Редактировать"-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="EditButton" Click="EditButton_OnClick"  ToolTip="Изменить запись" 
+                                    HorizontalAlignment="Center" VerticalAlignment="Top" Cursor="Hand" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="ИЗМ" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                        <Rectangle Width="20" Margin="5 0">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Visual="{StaticResource EditSvgIcon}" Stretch="Uniform" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Цех" IsReadOnly="True"
+                                        Binding="{Binding Path=WorkGuildId}"
+                                        MinWidth="25"
+                                        Width="Auto">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="2"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Уч" IsReadOnly="True"
+                                        Binding="{Binding Path=ParcelId}"
+                                        MinWidth="25"
+                                        Width="Auto">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="2"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Код" IsReadOnly="True"
+											Binding="{Binding Path=DisplayCodeString}" 
+											MinWidth="60"
+											Width="Auto"
+											SortDirection="Ascending">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="2"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Наименование" IsReadOnly="True"
+											Binding="{Binding Path=Name}"
+											MinWidth="120"
+											Width="Auto">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="2"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Марка" IsReadOnly="True"
+                                        Binding="{Binding Path=Profile}"
+                                        MinWidth="103"
+                                        Width="Auto">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="3"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="ГОСТ" IsReadOnly="True"
+                                        Binding="{Binding Path=Gost}"
+                                        MinWidth="25"
+                                        Width="Auto"
+                                        >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="2"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid Grid.Column="0" Grid.Row="3" >
+                <Button Margin="2.5" Padding="0 0 5 0" Cursor="Hand" 
+                        ToolTip="Добавить изделие" Click="AddProductButton_OnClick">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="20" Margin="5 0">
+                            <Rectangle.Fill>
+                                <VisualBrush Visual="{StaticResource AddSvgIcon}" Stretch="Uniform" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <TextBlock Text="Добавить изд." VerticalAlignment="Center" 
+                                   TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="3" Grid.RowSpan="2" >
+                <Button Margin="2.5" Padding="0 0 5 0" Cursor="Hand" Name="AddMaterialButton" IsEnabled="False"
+                    ToolTip="Добавить материал" Click="AddButton_OnClick">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="20" Margin="5 0">
+                            <Rectangle.Fill>
+                                <VisualBrush Visual="{StaticResource AddSvgIcon}" Stretch="Uniform" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <TextBlock Text="Добавить материал" VerticalAlignment="Center" 
+                               TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
